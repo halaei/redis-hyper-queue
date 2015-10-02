@@ -1,7 +1,7 @@
 {
   "name": "halaei/redis-hyper-queue",
-  "description": "Multidimensional job queue based on Redis",
-  "keywords": ["Redis", "Queue"],
+  "description": "Reids based multidimensional FIFO, scheduling and priority queues",
+  "keywords": ["Redis", "Queue", "FIFO", "Priority Queue", "Job Scheduling"],
   "license": "MIT",
   "authors": [
     {
@@ -20,6 +20,11 @@
   "autoload": {
     "psr-4": {
       "Redis\\HyperQueue\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HyperQueueTests\\Base\\": "tests/Base/"
     }
   }
 }
