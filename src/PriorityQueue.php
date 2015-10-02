@@ -75,6 +75,7 @@ LUA;
             $scores[$keyScores[$i]] = $keyScores[$i + 1];
         }
         $keyValues = $this->hashTable->get($keys);
+        $this->hashTable->delete($keys);
 
         $items = [];
         foreach ($keyValues as $key => $value) {

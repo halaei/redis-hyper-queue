@@ -45,4 +45,16 @@ class PriorityQueueTest extends IntegrationTestCase
         $this->assertEquals([$input[4], $input[3]], $this->queue->pop(10));
         $this->assertEquals([], $this->queue->pop());
     }
+
+    public function test_priority_queue_interaction_with_hash_table()
+    {
+        $this->assertEquals(0, $this->redis->hlen('priority-queue:hash-table'));
+
+        $input = [new PriorityItem('foo', 1)];
+        $this->queue->push($input);
+        $this->assertEquals(1, $this->redis->hlen('priority-queue:hash-table'));
+
+        $this->queue->pop(1);
+        $this->assertEquals(0, $this->redis->hlen('priority-queue:hash-table'));
+    }
 }
