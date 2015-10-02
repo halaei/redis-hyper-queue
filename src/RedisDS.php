@@ -4,7 +4,7 @@ namespace Redis\HyperQueue;
 
 use Predis\Client;
 
-abstract class RedisQueue
+abstract class RedisDS
 {
     /**
      * @var Client
