@@ -85,4 +85,12 @@ class FIFOQueueTest extends IntegrationTestCase
             exit(0);
         }
     }
+
+    public function test_unpop()
+    {
+        $input = [1, 2, 3];
+        $this->queue->unPop($input);
+        $output = $this->queue->pop(3);
+        $this->assertEquals(array_reverse($input), $output);
+    }
 }
