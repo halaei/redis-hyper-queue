@@ -1,6 +1,7 @@
 <?php
 
 namespace Redis\HyperQueue;
+
 use Predis\Client;
 
 /**
@@ -21,16 +22,22 @@ class PriorityQueue extends RedisDS implements IQueue
      */
     protected $hashTable;
 
+    /**
+     * @var FIFOQueue
+     */
+    protected $list;
+
     public function __construct(Client $redis, $name)
     {
         parent::__construct($redis, $name);
         $this->autoIncrementingId = new UniqueId($this->redis, $name . ':auto-incrementing-id');
         $this->hashTable = new HashTable($this->redis, $name . ':hash-table');
+        $this->list = new FIFOQueue($this->redis, $name . ':list');
     }
 
     /**
      * @param PriorityItem[] $items
-     * @return int size of the queue
+     * @return int the number of elements added
      * The ids of items will be set on return
      */
     public function push($items)
@@ -51,11 +58,18 @@ class PriorityQueue extends RedisDS implements IQueue
         }
 
         $this->hashTable->set($keyValues);
-        return $this->redis->zadd($this->name, $keyScores);
+        $n = $this->redis->zadd($this->name, $keyScores);
+        $this->list->push(array_fill(0, $n, 1));
+        return $n;
     }
 
     public function pop($n = 1, $timeout = 0)
     {
+        $n = count($this->list->pop($n, $timeout));
+        if (!$n) {
+            return [];
+        }
+
         $lua = <<<LUA
             local val = redis.call('zrange', KEYS[1], 0, KEYS[2] - 1, 'WITHSCORES')
             if(next(val) ~= nil) then
@@ -64,16 +78,19 @@ class PriorityQueue extends RedisDS implements IQueue
             return val
 LUA;
         $keyScores = $this->redis->eval($lua, 2, $this->name, $n);
+
         if (!count($keyScores)) {
             return [];
         }
+
         $keys = [];
         $scores = [];
-        for($i = 0; $i < count($keyScores); $i += 2)
-        {
+
+        for ($i = 0; $i < count($keyScores); $i += 2) {
             $keys[] = $keyScores[$i];
             $scores[$keyScores[$i]] = $keyScores[$i + 1];
         }
+
         $keyValues = $this->hashTable->get($keys);
         $this->hashTable->delete($keys);
 
