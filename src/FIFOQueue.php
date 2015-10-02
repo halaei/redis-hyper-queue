@@ -18,15 +18,15 @@ class FIFOQueue extends RedisDS implements IQueue
                 return values
 LUA;
 
-        $items = $this->client->eval($lua, 2, $this->name, $n);
+        $items = $this->redis->eval($lua, 2, $this->name, $n);
         if (!count($items) && $timeout) {
-            $items = $this->client->blpop([$this->name], $timeout);
+            $items = $this->redis->blpop([$this->name], $timeout);
             if (is_null($items)) {
                 return [];
             }
             $items = [$items[1]];
             if ($n > 1) {
-                $remainingItems = $this->client->eval($lua, 2, $this->name, $n - 1);
+                $remainingItems = $this->redis->eval($lua, 2, $this->name, $n - 1);
                 $items = array_merge($items, $remainingItems);
             }
         }
@@ -40,7 +40,7 @@ LUA;
     public function push($items)
     {
         $items = ArraySerialization::serializeArray($items);
-        return $this->client->rpush($this->name, $items);
+        return $this->redis->rpush($this->name, $items);
     }
 
     /**
@@ -52,6 +52,6 @@ LUA;
     public function unPop($items)
     {
         $items = ArraySerialization::serializeArray($items);
-        return $this->client->lpush($this->name, $items);
+        return $this->redis->lpush($this->name, $items);
     }
 }

@@ -9,7 +9,7 @@ abstract class RedisDS
     /**
      * @var Client
      */
-    protected $client;
+    protected $redis;
 
     /**
      * @var string
@@ -17,12 +17,12 @@ abstract class RedisDS
     protected $name;
 
     /**
-     * @param Client $client
+     * @param Client $redis
      * @param string $name queue name
      */
-    public function __construct(Client $client, $name)
+    public function __construct(Client $redis, $name)
     {
-        $this->client = $client;
+        $this->redis = $redis;
         $this->name = $name;
     }
 }

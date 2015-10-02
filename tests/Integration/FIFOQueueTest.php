@@ -86,7 +86,7 @@ class FIFOQueueTest extends IntegrationTestCase
         }
     }
 
-    public function test_unpop()
+    public function test_unPop()
     {
         $input = [1, 2, 3];
         $this->queue->unPop($input);

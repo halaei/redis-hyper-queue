@@ -9,6 +9,6 @@ class UniqueId extends RedisDS
     {
         $n = (int) $n;
         assert($n > 0);
-        return $this->client->incrby($this->name, $n);
+        return $this->redis->incrby($this->name, $n);
     }
 }
