@@ -33,4 +33,13 @@ class HashTable extends RedisDS
             return serialize($item);
         }, $keyValues));
     }
+
+    /**
+     * @param string[] $keys
+     * @return int number of removed keys
+     */
+    public function delete($keys)
+    {
+        return $this->redis->hdel($this->name, $keys);
+    }
 }

@@ -28,4 +28,11 @@ class HashTableTest extends IntegrationTestCase
         $this->hashTable->set(['bar' => 'foo', 'baz' => null, 'foobar' => 1]);
         $this->assertEquals(['bar' => 'foo', 'baz' => null], $this->hashTable->get(['bar', 'baz', 'foo']));
     }
+
+    public function test_delete()
+    {
+        $this->hashTable->set(['bar' => 'foo', 'baz' => null, 'foobar' => 1]);
+        $this->assertEquals(2, $this->hashTable->delete(['foo', 'bar', 'baz']));
+        $this->assertEquals(['foobar' => 1], $this->hashTable->get(['foobar', 'bar', 'baz']));
+    }
 }
