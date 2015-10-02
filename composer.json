@@ -1,6 +1,6 @@
 {
   "name": "halaei/redis-hyper-queue",
-  "description": "Reids based multidimensional FIFO, scheduling and priority queues",
+  "description": "Reids-based multidimensional FIFO, scheduling and priority queues",
   "keywords": ["Redis", "Queue", "FIFO", "Priority Queue", "Job Scheduling"],
   "license": "MIT",
   "authors": [
