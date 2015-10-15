@@ -14,7 +14,7 @@ use Predis\Client;
  *
  * @inheritdoc
  */
-class SafeQueue extends RedisDS implements IDoubleEndedQueue
+class SafeQueue extends RedisDS implements IDoubleEndedQueue, IQueue
 {
     /**
      * @var Queue
@@ -33,26 +33,45 @@ class SafeQueue extends RedisDS implements IDoubleEndedQueue
         $this->safeQueue = new Queue($this->redis, $this->name . ':safe');
     }
 
+    public function enqueue(array $items)
+    {
+        return $this->unShift($items);
+    }
+
+    public function dequeue($n = 1, $timeout = 0)
+    {
+        return $this->pop($n, $timeout);
+    }
+
+    public function push(array $items)
+    {
+        $this->mainQueue->push($items);
+        return $this->safeQueue->push(array_fill(0, count($items), 1));
+    }
+
     public function pop($n = 1, $timeout = 0)
     {
         $n = count($this->safeQueue->pop($n, $timeout));
-        return $this->mainQueue->pop($n);
+        if($n) {
+            return $this->mainQueue->pop($n, 0);
+
+        }
+        return [];
     }
 
-    public function push($items)
+    public function unShift(array $items)
     {
-        $this->mainQueue->push($items);
-        $this->safeQueue->push(array_fill(0, count($items), 1));
+        $this->mainQueue->unShift($items);
+        return $this->safeQueue->unShift(array_fill(0, count($items), 1));
     }
 
     public function shift($n = 1, $timeout = 0)
     {
-        // TODO: Implement shift() method.
-    }
+        $n = count($this->safeQueue->shift($n, $timeout));
+        if($n) {
+            return $this->mainQueue->shift($n, 0);
 
-    public function unShift($items)
-    {
-        $this->mainQueue->unShift($items);
-        $this->safeQueue->unShift(array_fill(0, count($items), 1));
+        }
+        return [];
     }
 }

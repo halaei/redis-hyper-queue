@@ -34,7 +34,7 @@ class NonBlockingPriorityQueue extends RedisDS implements IQueue
      * @return int the number of elements added
      * The ids of items will be set on return
      */
-    public function push($items)
+    public function enqueue(array $items)
     {
         $n = count($items);
         $uniqueId = $this->autoIncrementingId->getUniqueId($n);
@@ -55,7 +55,7 @@ class NonBlockingPriorityQueue extends RedisDS implements IQueue
         return $this->redis->zadd($this->name, $keyScores);
     }
 
-    public function pop($n = 1, $timeout = 0)
+    public function dequeue($n = 1, $timeout = 0)
     {
         $keyScores = $this->getKeyScores($n);
 

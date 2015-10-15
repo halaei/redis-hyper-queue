@@ -21,7 +21,7 @@ class SchedulingQueueTest extends IntegrationTestCase
 
     public function test_pop_from_empty_queue()
     {
-        $this->assertEquals([], $this->queue->pop());
+        $this->assertEquals([], $this->queue->dequeue());
     }
 
     public function test_push_and_pop_one_element_at_a_time()
@@ -34,23 +34,23 @@ class SchedulingQueueTest extends IntegrationTestCase
             new PriorityItem('duplicate', $now - 4),
             new PriorityItem('duplicate', $now - 5),
         ];
-        $this->queue->push($input);
+        $this->queue->enqueue($input);
         $this->assertEquals(1, $input[0]->id);
         $this->assertEquals(2, $input[1]->id);
         $this->assertEquals(3, $input[2]->id);
         $this->assertEquals(4, $input[3]->id);
         $this->assertEquals(5, $input[4]->id);
 
-        $this->assertEquals([$input[2]], $this->queue->pop());
-        $this->assertEquals([$input[0], $input[1]], $this->queue->pop(2));
-        $this->assertEquals([$input[4], $input[3]], $this->queue->pop(10));
-        $this->assertEquals([], $this->queue->pop());
+        $this->assertEquals([$input[2]], $this->queue->dequeue());
+        $this->assertEquals([$input[0], $input[1]], $this->queue->dequeue(2));
+        $this->assertEquals([$input[4], $input[3]], $this->queue->dequeue(10));
+        $this->assertEquals([], $this->queue->dequeue());
     }
 
     public function test_blocking_pop_from_empty_queue()
     {
         $start = time();
-        $this->assertEquals([], $this->queue->pop(1, 1));
+        $this->assertEquals([], $this->queue->dequeue(1, 1));
         $this->assertGreaterThan($start, time());
     }
 }

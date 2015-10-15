@@ -28,20 +28,20 @@ class PriorityQueue extends NonBlockingPriorityQueue
      * @return int the number of elements added
      * The ids of items will be set on return
      */
-    public function push($items)
+    public function enqueue(array $items)
     {
-        $n = parent::push($items);
+        $n = parent::enqueue($items);
         $this->list->push(array_fill(0, $n, 1));
         return $n;
     }
 
-    public function pop($n = 1, $timeout = 0)
+    public function dequeue($n = 1, $timeout = 0)
     {
-        $n = count($this->list->pop($n, $timeout));
+        $n = count($this->list->dequeue($n, $timeout));
         if (!$n) {
             return [];
         }
 
-        return parent::pop($n, 0);
+        return parent::dequeue($n, 0);
     }
 }

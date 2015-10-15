@@ -21,7 +21,7 @@ class PriorityQueueTest extends IntegrationTestCase
 
     public function test_pop_from_empty_queue()
     {
-        $this->assertEquals([], $this->queue->pop());
+        $this->assertEquals([], $this->queue->dequeue());
     }
 
     public function test_push_and_pop_one_element_at_a_time()
@@ -33,17 +33,17 @@ class PriorityQueueTest extends IntegrationTestCase
             new PriorityItem('duplicate', 6),
             new PriorityItem('duplicate', 5),
         ];
-        $this->queue->push($input);
+        $this->queue->enqueue($input);
         $this->assertEquals(1, $input[0]->id);
         $this->assertEquals(2, $input[1]->id);
         $this->assertEquals(3, $input[2]->id);
         $this->assertEquals(4, $input[3]->id);
         $this->assertEquals(5, $input[4]->id);
 
-        $this->assertEquals([$input[2]], $this->queue->pop());
-        $this->assertEquals([$input[0], $input[1]], $this->queue->pop(2));
-        $this->assertEquals([$input[4], $input[3]], $this->queue->pop(10));
-        $this->assertEquals([], $this->queue->pop());
+        $this->assertEquals([$input[2]], $this->queue->dequeue());
+        $this->assertEquals([$input[0], $input[1]], $this->queue->dequeue(2));
+        $this->assertEquals([$input[4], $input[3]], $this->queue->dequeue(10));
+        $this->assertEquals([], $this->queue->dequeue());
     }
 
     public function test_priority_queue_interaction_with_hash_table_and_list()
@@ -52,11 +52,11 @@ class PriorityQueueTest extends IntegrationTestCase
         $this->assertEquals(0, $this->redis->llen('priority-queue:list'));
 
         $input = [new PriorityItem('foo', 1), new PriorityItem('bar', 2)];
-        $this->queue->push($input);
+        $this->queue->enqueue($input);
         $this->assertEquals(2, $this->redis->hlen('priority-queue:hash-table'));
         $this->assertEquals(2, $this->redis->llen('priority-queue:list'));
 
-        $this->queue->pop(1);
+        $this->queue->dequeue(1);
         $this->assertEquals(1, $this->redis->hlen('priority-queue:hash-table'));
         $this->assertEquals(1, $this->redis->llen('priority-queue:list'));
     }
@@ -64,7 +64,7 @@ class PriorityQueueTest extends IntegrationTestCase
     public function test_blocking_pop_from_empty_queue()
     {
         $start = time();
-        $this->assertEquals([], $this->queue->pop(1, 1));
+        $this->assertEquals([], $this->queue->dequeue(1, 1));
         $this->assertGreaterThan($start, time());
     }
 
@@ -73,11 +73,11 @@ class PriorityQueueTest extends IntegrationTestCase
         $pid = pcntl_fork();
         if ($pid) {
             $start = time();
-            $this->assertEquals([new PriorityItem(1, 0, 1), new PriorityItem(2, 1, 2)], $this->queue->pop(3, 100));
+            $this->assertEquals([new PriorityItem(1, 0, 1), new PriorityItem(2, 1, 2)], $this->queue->dequeue(3, 100));
             $this->assertGreaterThanOrEqual($start + $this->childSleep, time());
         } else {
             sleep($this->childSleep);
-            $this->queue->push([new PriorityItem(1, 0), new PriorityItem(2, 1)]);
+            $this->queue->enqueue([new PriorityItem(1, 0), new PriorityItem(2, 1)]);
             exit(0);
         }
     }
