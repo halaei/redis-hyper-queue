@@ -86,10 +86,10 @@ class QueueTest extends IntegrationTestCase
         }
     }
 
-    public function test_unPop()
+    public function test_unShift()
     {
         $input = [1, 2, 3];
-        $this->queue->unPop($input);
+        $this->queue->unShift($input);
         $output = $this->queue->pop(3);
         $this->assertEquals(array_reverse($input), $output);
     }

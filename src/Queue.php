@@ -41,7 +41,7 @@ LUA;
         return $this->redis->rpush($this->name, $items);
     }
 
-    public function unPop($items)
+    public function unShift($items)
     {
         $items = ArraySerialization::serializeArray($items);
         return $this->redis->lpush($this->name, $items);

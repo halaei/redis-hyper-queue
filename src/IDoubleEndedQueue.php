@@ -16,5 +16,5 @@ interface IDoubleEndedQueue extends IQueue
      * @param array $items
      * @return int the number of items in the queue
      */
-    public function unPop($items);
+    public function unShift($items);
 }

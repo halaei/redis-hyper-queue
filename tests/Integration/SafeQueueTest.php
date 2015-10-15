@@ -42,7 +42,7 @@ class SafeQueueTest extends IntegrationTestCase
         $this->assertEquals(['OK'], $messageQueue->pop());
     }
 
-    public function test_safety_of_unPop()
+    public function test_safety_of_unShift()
     {
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
 
@@ -59,7 +59,7 @@ class SafeQueueTest extends IntegrationTestCase
         }
 
         sleep($this->childSleep);
-        $this->queue->unPop([1, 2, 3, 4]);
+        $this->queue->unShift([1, 2, 3, 4]);
 
         $this->assertEquals(['OK'], $messageQueue->pop(1, 100));
         $this->assertEquals(['OK'], $messageQueue->pop());
