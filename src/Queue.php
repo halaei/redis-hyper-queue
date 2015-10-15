@@ -3,12 +3,14 @@
 namespace Redis\HyperQueue;
 
 /**
- * Class FIFOQueue
+ * Class Queue
+ *
+ * FIFO Queue/Stack
  * @package Redis\HyperQueue
  *
  * @inheritdoc
  */
-class FIFOQueue extends RedisDS implements IQueue
+class Queue extends RedisDS implements IQueue
 {
     public function pop($n = 1, $timeout = 0)
     {

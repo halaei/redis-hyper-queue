@@ -3,19 +3,19 @@
 namespace HyperQueueTests\Integration;
 
 use HyperQueueTests\Base\IntegrationTestCase;
-use Redis\HyperQueue\FIFOQueue;
+use Redis\HyperQueue\Queue;
 
-class FIFOQueueTest extends IntegrationTestCase
+class QueueTest extends IntegrationTestCase
 {
     /**
-     * @var FIFOQueue
+     * @var Queue
      */
     protected $queue;
 
     public function setUp()
     {
         parent::setUp();
-        $this->queue = new FIFOQueue($this->redis, 'fifo');
+        $this->queue = new Queue($this->redis, 'fifo');
     }
 
     public function test_push_and_pop_1_item()

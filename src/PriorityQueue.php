@@ -13,14 +13,14 @@ use Predis\Client;
 class PriorityQueue extends NonBlockingPriorityQueue
 {
     /**
-     * @var FIFOQueue
+     * @var Queue
      */
     protected $list;
 
     public function __construct(Client $redis, $name)
     {
         parent::__construct($redis, $name);
-        $this->list = new FIFOQueue($this->redis, $name . ':list');
+        $this->list = new Queue($this->redis, $name . ':list');
     }
 
     /**
