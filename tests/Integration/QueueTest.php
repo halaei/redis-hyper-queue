@@ -32,6 +32,23 @@ class QueueTest extends IntegrationTestCase
         $this->assertEquals(['baz'], $this->queue->pop(1));
     }
 
+    public function test_push_and_shift_3_items()
+    {
+        $this->queue->push(['foo']);
+        $this->queue->push(['bar', 'baz']);
+        $this->assertEquals(['bar', 'baz'], $this->queue->shift(2));
+        $this->assertEquals(['foo'], $this->queue->shift(1));
+    }
+
+    public function test_unshift_and_shift_3_items()
+    {
+        $this->queue->unShift(['foo']);
+        $this->queue->unShift(['bar']);
+        $this->queue->unShift(['baz']);
+        $this->assertEquals(['bar', 'foo'], $this->queue->shift(2));
+        $this->assertEquals(['baz'], $this->queue->shift(1));
+    }
+
     public function test_pop_from_empty_queue()
     {
         $this->assertEquals([], $this->queue->pop());
