@@ -41,6 +41,11 @@ LUA;
         return $this->redis->rpush($this->name, $items);
     }
 
+    public function shift($n = 1, $timeout = 0)
+    {
+        // TODO: Implement shift() method.
+    }
+
     public function unShift($items)
     {
         $items = ArraySerialization::serializeArray($items);

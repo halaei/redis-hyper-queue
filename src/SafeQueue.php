@@ -45,6 +45,11 @@ class SafeQueue extends RedisDS implements IDoubleEndedQueue
         $this->safeQueue->push(array_fill(0, count($items), 1));
     }
 
+    public function shift($n = 1, $timeout = 0)
+    {
+        // TODO: Implement shift() method.
+    }
+
     public function unShift($items)
     {
         $this->mainQueue->unShift($items);
