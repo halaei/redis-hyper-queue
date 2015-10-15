@@ -5,6 +5,8 @@ php:
   - 5.6
   - 7.0
   - hhvm
+env:
+  - CHILD_SLEEP=10
 services:
   - redis-server
 install:
