@@ -39,7 +39,7 @@ class SafeQueueTest extends IntegrationTestCase
         $this->queue->push([1, 2, 3, 4]);
 
         $this->assertEquals(['OK'], $messageQueue->pop(1, 100));
-        $this->assertEquals(['OK'], $messageQueue->pop());
+        $this->assertEquals(['OK'], $messageQueue->pop(1, 100));
     }
 
     public function test_safety_of_unShift()
@@ -62,6 +62,6 @@ class SafeQueueTest extends IntegrationTestCase
         $this->queue->unShift([1, 2, 3, 4]);
 
         $this->assertEquals(['OK'], $messageQueue->pop(1, 100));
-        $this->assertEquals(['OK'], $messageQueue->pop());
+        $this->assertEquals(['OK'], $messageQueue->pop(1, 100));
     }
 }
