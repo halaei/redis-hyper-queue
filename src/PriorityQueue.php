@@ -10,7 +10,7 @@ use Predis\Client;
  *
  * @inheritdoc
  */
-class PriorityQueue extends NonBlockingPriorityQueue
+class PriorityQueue extends BasePriorityQueue
 {
     /**
      * @var Queue

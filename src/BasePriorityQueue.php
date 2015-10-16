@@ -5,12 +5,12 @@ namespace Redis\HyperQueue;
 use Predis\Client;
 
 /**
- * Class NonBlockingPriorityQueue
+ * Class BasePriorityQueue
  * @package Redis\HyperQueue
  *
  * @inheritdoc
  */
-class NonBlockingPriorityQueue extends RedisDS implements IQueue
+class BasePriorityQueue extends RedisDS implements IQueue
 {
     /**
      * @var UniqueId
@@ -57,7 +57,7 @@ class NonBlockingPriorityQueue extends RedisDS implements IQueue
 
     public function dequeue($n = 1, $timeout = 0)
     {
-        $keyScores = $this->getKeyScores($n);
+        $keyScores = $this->getKeysAndScores($n);
 
         if (!count($keyScores)) {
             if($timeout > 0) {
@@ -89,7 +89,7 @@ class NonBlockingPriorityQueue extends RedisDS implements IQueue
      * @param int $n
      * @return array
      */
-    protected function getKeyScores($n)
+    protected function getKeysAndScores($n)
     {
         $lua = <<<LUA
             local val = redis.call('zrange', KEYS[1], 0, KEYS[2] - 1, 'WITHSCORES')

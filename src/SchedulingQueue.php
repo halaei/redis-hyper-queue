@@ -8,13 +8,13 @@ namespace Redis\HyperQueue;
  *
  * @inheritdoc
  */
-class SchedulingQueue extends NonBlockingPriorityQueue
+class SchedulingQueue extends BasePriorityQueue
 {
     /**
      * @param int $n
      * @return array
      */
-    protected function getKeyScores($n)
+    protected function getKeysAndScores($n)
     {
         $lua = <<<LUA
             local val = redis.call('zrangebyscore', KEYS[1], '-inf', KEYS[2], 'WITHSCORES', 'LIMIT' ,0, KEYS[3])
