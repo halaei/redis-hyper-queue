@@ -46,7 +46,7 @@ class SafeQueue extends RedisDS implements IDoubleEndedQueue, IQueue
     public function push(array $items)
     {
         $this->mainQueue->push($items);
-        return $this->safeQueue->push(array_fill(0, count($items), 1));
+        return $this->safeQueue->push(array_fill(0, count($items), ''));
     }
 
     public function pop($n = 1, $timeout = 0)

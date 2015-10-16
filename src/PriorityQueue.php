@@ -31,7 +31,7 @@ class PriorityQueue extends NonBlockingPriorityQueue
     public function enqueue(array $items)
     {
         $n = parent::enqueue($items);
-        $this->list->push(array_fill(0, $n, 1));
+        $this->list->push(array_fill(0, $n, ''));
         return $n;
     }
 
