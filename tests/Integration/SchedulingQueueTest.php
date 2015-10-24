@@ -47,6 +47,20 @@ class SchedulingQueueTest extends IntegrationTestCase
         $this->assertEquals([], $this->queue->dequeue());
     }
 
+    public function test_pop_multiple_elements_at_once()
+    {
+        $now = microtime(true);
+        $input = [
+            new PriorityItem('first', $now - 9),
+            new PriorityItem('second', $now - 8),
+            new PriorityItem('third', $now - 10),
+            new PriorityItem('duplicate', $now),
+            new PriorityItem('duplicate', $now),
+        ];
+        $this->queue->enqueue($input);
+        $this->assertCount(5, $this->queue->dequeue(50));
+    }
+
     public function test_blocking_pop_from_empty_queue()
     {
         $start = time();

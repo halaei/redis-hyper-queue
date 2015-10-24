@@ -55,6 +55,11 @@ class BasePriorityQueue extends RedisDS implements IQueue
         return $this->redis->zadd($this->name, $keyScores);
     }
 
+    /**
+     * @param int $n
+     * @param int $timeout
+     * @return PriorityItem[]
+     */
     public function dequeue($n = 1, $timeout = 0)
     {
         $keyScores = $this->getKeysAndScores($n);
