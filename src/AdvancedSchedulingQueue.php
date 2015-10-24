@@ -68,7 +68,7 @@ class AdvancedSchedulingQueue extends RedisDS implements IQueue
         }
         $start = microtime(true);
         //if nothing popped: while timeout is not reached do the following:
-        while (microtime(true) - $start <= $timeout) {
+        while (time() - $start <= $timeout) {
             $result = $this->queue->dequeue($n, 0);
             if (count($result)) {
                 return $result;

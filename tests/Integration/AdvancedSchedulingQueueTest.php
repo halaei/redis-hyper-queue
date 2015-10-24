@@ -87,7 +87,7 @@ class AdvancedSchedulingQueueTest extends IntegrationTestCase
         $this->assertEquals([], $items);
     }
 
-    public function test_waiting_for_3_seconds_to_multi_pop_from_a_queue_that_has_items_expiring_in_2_seconds()
+    public function test_waiting_for_2_seconds_to_multi_pop_from_a_queue_that_has_items_being_expired_in_2_seconds()
     {
         $start = time();
         $this->queue->enqueue([
@@ -95,7 +95,7 @@ class AdvancedSchedulingQueueTest extends IntegrationTestCase
             new PriorityItem('2 seconds later 2', $start + 2),
             new PriorityItem('2 seconds later 3', $start + 2),
         ]);
-        $items = $this->queue->dequeue(3, 3);
+        $items = $this->queue->dequeue(3, 2);
         $this->assertCount(3, $items);
         $this->assertEquals('2 seconds later 1', $items[0]->value);
         $this->assertEquals('2 seconds later 2', $items[1]->value);
