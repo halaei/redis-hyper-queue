@@ -68,7 +68,7 @@ class AdvancedSchedulingQueue extends RedisDS implements IQueue
         }
         $start = microtime(true);
         //if nothing popped: while timeout is not reached do the following:
-        while (time() - $start <= $timeout) {
+        while (($loopStart = microtime(true)) < $start + $timeout + 1) {
             $result = $this->queue->dequeue($n, 0);
             if (count($result)) {
                 return $result;
@@ -85,7 +85,7 @@ class AdvancedSchedulingQueue extends RedisDS implements IQueue
             }
             //$x = blpop "{$this->name}:$best", $t0
             //if $x: dequeue, if something is dequeued return
-            $timeToWait = max(1, ceil(min($timeout, $t0 - $start)));
+            $timeToWait = max(1, ceil(min($timeout - $loopStart + $start, $t0 - $loopStart)));
             $items = $this->redis->blpop([$this->name . ':' . $best], $timeToWait);
             if (is_null($items)) {
                 continue;

@@ -70,7 +70,7 @@ class PriorityQueueTest extends IntegrationTestCase
 
     public function test_blocking_pop_from_a_queue_that_will_be_filled()
     {
-        $pid = pcntl_fork();
+        $pid = $this->fork();
         if ($pid) {
             $start = time();
             $this->assertEquals([new PriorityItem(1, 0, 1), new PriorityItem(2, 1, 2)], $this->queue->dequeue(3, 100));

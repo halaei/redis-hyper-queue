@@ -107,7 +107,7 @@ class AdvancedSchedulingQueueTest extends IntegrationTestCase
     {
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
         for ($i = 0; $i < 10; $i++) {
-            if (!pcntl_fork()) {
+            if (!$this->fork()) {
                 $items = $this->queue->dequeue(1, 100);
                 if (count($items) > 0) {
                     $messageQueue->push([$items[0]->value]);
@@ -132,7 +132,7 @@ class AdvancedSchedulingQueueTest extends IntegrationTestCase
     {
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
         for ($i = 0; $i < 10; $i++) {
-            if (!pcntl_fork()) {
+            if (!$this->fork()) {
                 $items = $this->queue->dequeue(1, 100);
                 if (count($items) > 0) {
                     $messageQueue->push([$items[0]->value]);
@@ -157,7 +157,7 @@ class AdvancedSchedulingQueueTest extends IntegrationTestCase
     {
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
         for ($i = 0; $i < 10; $i++) {
-            if (!pcntl_fork()) {
+            if (!$this->fork()) {
                 $items = $this->queue->dequeue(1, 100);
                 if (count($items) > 0) {
                     $messageQueue->push([$items[0]->value]);
@@ -182,7 +182,7 @@ class AdvancedSchedulingQueueTest extends IntegrationTestCase
     {
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
         for ($i = 0; $i < 10; $i++) {
-            if (!pcntl_fork()) {
+            if (!$this->fork()) {
                 $items = $this->queue->dequeue(2, 100);
                 if (count($items) == 2) {
                     $messageQueue->push([$items[0]->value, $items[1]->value]);

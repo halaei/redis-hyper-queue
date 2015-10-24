@@ -57,7 +57,7 @@ class QueueTest extends IntegrationTestCase
 
     public function test_blocking_dequeue_from_a_queue_that_will_be_filled()
     {
-        $pid = pcntl_fork();
+        $pid = $this->fork();
         if ($pid) {
             $start = time();
             $this->assertEquals(['foo bar'], $this->queue->dequeue(1, 100));
@@ -71,7 +71,7 @@ class QueueTest extends IntegrationTestCase
 
     public function test_blocking_dequeue_2_items_from_a_queue_that_will_be_filled()
     {
-        $pid = pcntl_fork();
+        $pid = $this->fork();
         if ($pid) {
             $start = time();
             $this->assertEquals(['foo bar', 'baz'], $this->queue->dequeue(2, 100));
@@ -85,7 +85,7 @@ class QueueTest extends IntegrationTestCase
 
     public function test_blocking_dequeue_2_items_from_a_queue_that_will_be_filled_only_by_1_item()
     {
-        $pid = pcntl_fork();
+        $pid = $this->fork();
         if ($pid) {
             $start = time();
             $this->assertEquals(['foo bar'], $this->queue->dequeue(2, 100));

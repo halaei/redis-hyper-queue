@@ -24,7 +24,7 @@ class SafeQueueTest extends IntegrationTestCase
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
 
         for ($i = 0; $i < 2; $i++) {
-            if(! pcntl_fork()) {
+            if(! $this->fork()) {
                 $items = $this->queue->pop(2, 100);
                 if (is_array($items) && count($items) == 2 && $items[1] == $items[0] + 1) {
                     $messageQueue->unShift(['OK']);
@@ -47,7 +47,7 @@ class SafeQueueTest extends IntegrationTestCase
         $messageQueue = new Queue($this->redis, 'fifo:message_queue');
 
         for ($i = 0; $i < 2; $i++) {
-            if(! pcntl_fork()) {
+            if(! $this->fork()) {
                 $items = $this->queue->shift(2, 100);
                 if (is_array($items) && count($items) == 2 && $items[1] == $items[0] - 1) {
                     $messageQueue->push(['OK']);
